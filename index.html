@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>GambleX - Play and Win Big!</title>
+    <style>
+        /* Your existing styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #4e54c8;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+        .hero-section {
+            background-image: url('background-image.jpg');
+            background-size: cover;
+            background-position: center;
+            color: #8f94fb;
+            text-align: center;
+            padding: 100px 0;
+        }
+        .hero-section h1 {
+            font-size: 3em;
+        }
+        .games-section {
+            display: flex;
+            justify-content: space-around;
+            padding: 40px 20px;
+            background-color: #fff;
+        }
+        .game-card {
+            background-color: #8b6dc2;
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            width: 200px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .game-card h2 {
+            position: relative;
+            z-index: 1;
+        }
+        .game-card:hover {
+            transform: scale(1.1);
+        }
+        .footer {
+            background-color: #8f94fb;
+            color: #8f94fb;
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        /* Login form styles */
+        .login-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+        }
+        .login-form {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+        }
+        .login-form h2 {
+            color: #4e54c8;
+            margin-bottom: 20px;
+        }
+        .login-form input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .login-form button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4e54c8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        #error-message {
+            color: red;
+            margin-top: 10px;
+        }
+        #logged-in-status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #8b6dc2;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>GambleX</h1>
+        <p>Your ultimate place to play and win big!</p>
+        <div id="auth-buttons" style="margin-top: 10px;">
+            <a href="#" id="login-btn" style="color: white; text-decoration: none; padding: 10px 20px; background-color: #8f94fb; border-radius: 5px; display: inline-block; margin-right: 10px;">Login</a>
+            <a href="signup.html" style="color: white; text-decoration: none; padding: 10px 20px; background-color: #8b6dc2; border-radius: 5px; display: inline-block;">Sign Up</a>
+        </div>
+        <div id="logged-in-status" style="display: none;"></div>
+    </header>
+
+    <section class="hero-section">
+        <h1>Play the Best Casino Games Online</h1>
+        <p>Join now and get a 15% bonus on your first deposit!</p>
+    </section>
+
+    <section class="games-section">
+        <div class="game-card">
+            <h2>Mines</h2>
+            <p>Spin the wheel and win big!</p>
+            <a href="mines.html">
+                <button>Play Now</button>
+            </a>
+        </div>
+        <div class="game-card">
+            <h2>Blackjack</h2>
+            <p>Beat the dealer and score big!</p>
+            <a href="blackjack.html">
+                <button>Play Now</button>
+            </a>
+        </div>
+        <div class="game-card">
+            <h2>Slots</h2>
+            <p>Try your luck on the slots!</p>
+            <a href="slots.html" target="_blank">
+                <button>Play Now</button>
+            </a>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2025 GambleX. All Rights Reserved.</p>
+        <p><a href="#">Terms & Conditions</a> | <a href="#">Privacy Policy</a></p>
+    </footer>
+
+    <!-- Login Form Overlay -->
+    <div class="login-overlay" id="login-overlay">
+        <div class="login-form">
+            <span class="close-btn" id="close-btn">&times;</span>
+            <h2>Login to Your Account</h2>
+            <form id="login-form">
+                <input type="text" id="username" placeholder="Username" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+            <div id="error-message"></div>
+            <p>Don't have an account? <a href="signup.html" style="color: #4e54c8;">Sign up here</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Simulated user database (In a real application, this would be on the server)
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+
+        // Function to check if user is logged in
+        function checkLoggedIn() {
+            const loggedInUser = localStorage.getItem('loggedInUser');
+            if (loggedInUser) {
+                document.getElementById('auth-buttons').style.display = 'none';
+                document.getElementById('logged-in-status').style.display = 'block';
+                document.getElementById('logged-in-status').textContent = `Logged in as ${loggedInUser}`;
+            }
+        }
+
+        // Function to handle login
+        function login(username, password) {
+            const user = users.find(u => u.username === username && u.password === password);
+            if (user) {
+                localStorage.setItem('loggedInUser', username);
+                document.getElementById('login-overlay').style.display = 'none';
+                checkLoggedIn();
+            } else {
+                document.getElementById('error-message').textContent = 'Invalid username or password';
+            }
+        }
+
+        // Function to handle logout
+        function logout(e) {
+            e.preventDefault();
+            localStorage.removeItem('loggedInUser');
+            location.reload();
+        }
+
+        // Event listeners
+        document.getElementById('login-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('login-overlay').style.display = 'block';
+        });
+
+        document.getElementById('close-btn').addEventListener('click', function() {
+            document.getElementById('login-overlay').style.display = 'none';
+        });
+
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            login(username, password);
+        });
+
+        // Check if user is logged in when page loads
+        checkLoggedIn();
+    </script>
+</body>
+</html>
+

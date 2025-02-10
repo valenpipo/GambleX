@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>GambleX - Sign Up</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #4e54c8;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        .signup-section {
+            background-image: url('background-image.jpg');
+            background-size: cover;
+            background-position: center;
+            color: #8f94fb;
+            text-align: center;
+            padding: 50px 0;
+        }
+        .signup-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 40px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .signup-container h2 {
+            color: #4e54c8;
+            margin-bottom: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        input {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #8b6dc2;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        .footer {
+            background-color: #8f94fb;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .footer a {
+            color: white;
+            text-decoration: none;
+        }
+        #error-message {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>GambleX</h1>
+        <p>Your ultimate place to play and win big!</p>
+    </header>
+
+    <section class="signup-section">
+        <div class="signup-container">
+            <h2>Create Your Account</h2>
+            <form id="signup-form">
+                <input type="text" id="username" name="username" placeholder="Username" required>
+                <input type="email" id="email" name="email" placeholder="Email" required>
+                <input type="password" id="password" name="password" placeholder="Password" required>
+                <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required>
+                <button type="submit">Sign Up</button>
+            </form>
+            <div id="error-message"></div>
+            <p>Already have an account? <a href="index.html" style="color: #4e54c8;">Login here</a></p>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2025 GambleX. All Rights Reserved.</p>
+        <p><a href="#">Terms & Conditions</a> | <a href="#">Privacy Policy</a></p>
+    </footer>
+
+    <script>
+        function simulateSendEmail(email, username) {
+            console.log(`Simulating email sent to ${email}:`);
+            console.log(`
+Subject: Welcome to GambleX!
+
+Dear ${username},
+
+Thank you for creating an account with GambleX. We're excited to have you join our community of online gamblers!
+
+Your account has been successfully created. You can now log in and start playing our exciting games.
+
+If you have any questions or need assistance, please don't hesitate to contact our support team.
+
+Happy gambling!
+
+Best regards,
+The GambleX Team
+            `);
+        }
+
+        document.getElementById('signup-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+
+            if (password !== confirmPassword) {
+                document.getElementById('error-message').textContent = 'Passwords do not match';
+                return;
+            }
+
+            // In a real application, you would send this data to a server
+            // For this example, we'll store it in localStorage
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            if (users.some(user => user.username === username)) {
+                document.getElementById('error-message').textContent = 'Username already exists';
+                return;
+            }
+
+            users.push({ username, email, password });
+            localStorage.setItem('users', JSON.stringify(users));
+
+            // Simulate sending an email
+            simulateSendEmail(email, username);
+
+            alert('Account created successfully! You can now log in. Check the console for the simulated email.');
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>
+
+
